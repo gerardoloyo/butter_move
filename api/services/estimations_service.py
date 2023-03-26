@@ -13,12 +13,12 @@ STATE_COMMISSIONS = {
 def calculate_estimation(state: str, estimation_type: str, kilometers: float, base_amount: float) -> Dict[str, str]:
     state = state.upper()
     estimation_type = estimation_type.upper()
-    state_obj = State.query.filter_by(abbreviation=state).first()
+    state = State.query.filter_by(abbreviation=state).first()
     
-    if not state_obj:
+    if not state:
         raise ValueError('Unsupported state')
 
-    commission = state_obj.normal_commission if estimation_type == 'NORMAL' else state_obj.premium_commission
+    commission = state.normal_commission if estimation_type == 'NORMAL' else state.premium_commission
     total_amount = base_amount * (1 + commission)
 
     if estimation_type == 'NORMAL':
