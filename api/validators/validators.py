@@ -19,13 +19,13 @@ def validate_params(required_params):
             if missing_params:
                 return jsonify({'status': 'FAIL', 'message': 'Missing required parameters'}), 400
 
-            # Check each parameter to be of the correct type
-            incorrect_types = [
-                param for param, expected_type in required_params.items()
-                if not isinstance(data[param], expected_type)
+            # Check each parameter to be of the correct type and pattern
+            incorrect_types_or_patterns = [
+                param for param, (expected_type, regex_pattern) in required_params.items()
+                if not isinstance(data[param], expected_type) or (isinstance(data[param], str) and regex_pattern and not re.match(regex_pattern, data[param].upper()))
             ]
-            if incorrect_types:
-                return jsonify({'status': 'FAIL', 'message': 'Incorrect parameter types'}), 400
+            if incorrect_types_or_patterns:
+                return jsonify({'status': 'FAIL', 'message': 'Incorrect parameter types or patterns'}), 400
             
             return func(*args, **kwargs)
         

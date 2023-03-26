@@ -7,10 +7,10 @@ estimations_controller = Blueprint('estimations_controller', __name__)
 @estimations_controller.route('/estimate', methods=['POST'])
 @validators.validate_params(
     required_params={
-        'state': str,
-        'estimation_type': str,
-        'kilometers': float,
-        'base_amount': float
+        'state': (str, r'^[A-Z]{2}$'),
+        'estimation_type': (str, r'^(NORMAL|PREMIUM)$'),
+        'kilometers': (float, None),
+        'base_amount': (float, None)
     }
 )
 def estimate():
