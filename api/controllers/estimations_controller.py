@@ -1,11 +1,11 @@
 from flask import Blueprint, request, jsonify
-from api.validators import validate_params
+from api.validators import validators
 from api.services import estimations_service
 
 estimations_controller = Blueprint('estimations_controller', __name__)
 
 @estimations_controller.route('/estimate', methods=['POST'])
-@validate_params(
+@validators.validate_params(
     required_params={
         'state': str,
         'estimation_type': str,

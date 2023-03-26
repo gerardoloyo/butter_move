@@ -6,18 +6,18 @@ def validate_params(required_params):
         def wrapper(*args, **kwargs):
             # Check ip-client header
             if not is_valid_ip(request.headers.get('ip-client')):
-                return jsonify({'message': 'Invalid IP address'}), 400
+                return jsonify({'status': 'FAIL', 'message': 'Invalid IP address'}), 400
             
             data = request.get_json()
 
             # Check if there is json on request
             if not data:
-                return jsonify({"message": "Missing JSON in request"}), 400
+                return jsonify({'status': 'FAIL', "message": "Missing JSON in request"}), 400
 
             # Check for missing parameters
             missing_params = [param for param in required_params if param not in data]
             if missing_params:
-                return jsonify({"message": "Missing required parameters"}), 400
+                return jsonify({'status': 'FAIL', "message": "Missing required parameters"}), 400
 
             # Check each parameter to be of the correct type
             incorrect_types = [
@@ -25,7 +25,7 @@ def validate_params(required_params):
                 if not isinstance(data[param], expected_type)
             ]
             if incorrect_types:
-                return jsonify({"message": "Incorrect parameter types"}), 400
+                return jsonify({'status': 'FAIL', "message": "Incorrect parameter types"}), 400
             
             return func(*args, **kwargs)
         
