@@ -1,7 +1,6 @@
 from flask import Blueprint, request, jsonify
 from api.validators import validators
-from api.models.states_model import State
-from api import db
+from api.services.states_service import StatesService
 
 states_controller = Blueprint('states_controller', __name__)
 
@@ -15,17 +14,13 @@ states_controller = Blueprint('states_controller', __name__)
 )
 def add_state():
     data = request.get_json()
-
-    state = State(
+    state_service = StatesService(
         abbreviation=data['abbreviation'],
         normal_commission=data['normal_commission'],
         premium_commission=data['premium_commission']
     )
+    return state_service.add_state()
 
-    db.session.add(state)
-    db.session.commit()
-
-    return jsonify({'message': 'State added successfully'}), 201
 
 @states_controller.route('/state', methods=['PATCH'])
 @validators.validate_params(
