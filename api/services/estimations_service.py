@@ -1,5 +1,4 @@
 from datetime import datetime
-import re
 from typing import Dict
 
 STATE_COMMISSIONS = {
@@ -39,10 +38,4 @@ def calculate_estimation(state: str, estimation_type: str, kilometers: float, ba
         'processed_date': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
     }
 
-
-def is_valid_ip(ip: str) -> bool:
-    ipv4_pattern = re.compile(r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$')
-    ipv6_pattern = re.compile(r'^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(::[0-9a-fA-F]{1,4}){1,7}|[0-9a-fA-F]{1,4}::{1,7}|[0-9a-fA-F]{1,4}::[0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){1,5})$')
-
-    return bool(ipv4_pattern.match(ip) or ipv6_pattern.match(ip))
 

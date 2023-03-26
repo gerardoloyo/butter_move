@@ -14,9 +14,6 @@ estimations_controller = Blueprint('estimations_controller', __name__)
     }
 )
 def estimate():
-    if not estimations_service.is_valid_ip(request.headers.get('ip-client')):
-        return jsonify({'message': 'Invalid IP address'}), 400
-
     data = request.get_json()
 
     try:

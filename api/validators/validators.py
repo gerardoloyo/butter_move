@@ -1,8 +1,13 @@
 from flask import request, jsonify
+import re
 
 def validate_params(required_params):
     def decorator(func):
         def wrapper(*args, **kwargs):
+            # Check ip-client header
+            if not is_valid_ip(request.headers.get('ip-client')):
+                return jsonify({'message': 'Invalid IP address'}), 400
+            
             data = request.get_json()
 
             # Check if there is json on request
@@ -27,3 +32,14 @@ def validate_params(required_params):
         return wrapper
     
     return decorator
+
+
+def is_valid_ip(ip: str) -> bool:
+    ipv4_pattern = re.compile(
+        r'^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$'
+    )
+    ipv6_pattern = re.compile(
+        r'^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|(::[0-9a-fA-F]{1,4}){1,7}|[0-9a-fA-F]{1,4}::{1,7}|[0-9a-fA-F]{1,4}::[0-9a-fA-F]{1,4}(:[0-9a-fA-F]{1,4}){1,5})$'
+    )
+
+    return bool(ipv4_pattern.match(ip) or ipv6_pattern.match(ip))
