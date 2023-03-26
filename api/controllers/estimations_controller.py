@@ -1,9 +1,18 @@
 from flask import Blueprint, request, jsonify
+from api.validators import validate_params
 from api.services import estimations_service
 
 estimations_controller = Blueprint('estimations_controller', __name__)
 
 @estimations_controller.route('/estimate', methods=['POST'])
+@validate_params(
+    required_params={
+        'state': str,
+        'estimation_type': str,
+        'kilometers': float,
+        'base_amount': float
+    }
+)
 def estimate():
     if not estimations_service.is_valid_ip(request.headers.get('ip-client')):
         return jsonify({'message': 'Invalid IP address'}), 400
