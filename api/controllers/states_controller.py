@@ -30,16 +30,11 @@ def add_state():
         'premium_commission': (float, None)
     }
 )
-def update_state(abbreviation):
+def update_state():
     data = request.get_json()
-    state = State.query.filter_by(abbreviation).first()
-
-    if not state:
-        abort(404)
-
-    state.normal_commission = data.get('normal_commission', state.normal_commission)
-    state.premium_commission = data.get('premium_commission', state.premium_commission)
-
-    db.session.commit()
-
-    return jsonify({'message': 'State updated successfully'}), 200
+    state_service = StatesService(
+        abbrevation=data['abreviation'],
+        normal_commission=data['normal_comission'],
+        premium_commission=['premium_comission']
+    )
+    return state_service.update_state()
