@@ -1,5 +1,6 @@
 from flask import request, jsonify
 import re
+import json
 
 def validate_params(required_params):
     def decorator(func):
@@ -22,7 +23,18 @@ def validate_params(required_params):
             # Check each parameter to be of the correct type and pattern
             incorrect_types_or_patterns = [
                 param for param, (expected_type, regex_pattern) in required_params.items()
-                if not isinstance(data[param], expected_type) or (isinstance(data[param], str) and regex_pattern and not re.match(regex_pattern, data[param].upper()))
+                if (
+                    not isinstance(data[param], expected_type)
+                    or (
+                        isinstance(data[param], str)
+                        and regex_pattern
+                        and not re.match(regex_pattern, data[param].upper())
+                    )
+                    or (
+                        expected_type == dict
+                        and not is_valid_json(data[param])
+                    )
+                )
             ]
             if incorrect_types_or_patterns:
                 return jsonify({'status': 'FAIL', 'message': 'Incorrect parameter types or patterns'}), 400
@@ -43,3 +55,12 @@ def is_valid_ip(ip: str) -> bool:
     )
 
     return bool(ipv4_pattern.match(ip) or ipv6_pattern.match(ip))
+
+
+def is_valid_json(json_dict):
+    try:
+        json_string = json.dumps(json_dict)
+        json.loads(json_string)
+    except json.JSONDecodeError:
+        return False
+    return True

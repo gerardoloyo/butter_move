@@ -3,10 +3,14 @@ from api.models.states_model import State
 from api import db
 
 class StatesService:
-    def __init__(self, abbreviation, normal_commission, premium_commission):
+    def __init__(self, abbreviation, normal_commission, premium_commission, iva, base_discount, total_discount, premium_discount):
         self.abbreviation = abbreviation
         self.normal_commission = normal_commission
         self.premium_commission = premium_commission
+        self.iva = iva
+        self.base_discount = base_discount
+        self.total_discount = total_discount
+        self.premium_discount = premium_discount
     
 
     def add_state(self):

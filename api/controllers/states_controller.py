@@ -9,7 +9,11 @@ states_controller = Blueprint('states_controller', __name__)
     required_params={
         'abbreviation': (str, r'^[A-Z]{2}$'),
         'normal_commission': (float, None),
-        'premium_commission': (float, None)
+        'premium_commission': (float, None),
+        'iva': (float, None),
+        'base_discount': (dict, None),
+        'total_discount': (dict, None),
+        'premium_discount': (dict, None)
     }
 )
 def add_state():
@@ -17,7 +21,11 @@ def add_state():
     state_service = StatesService(
         abbreviation = data['abbreviation'],
         normal_commission = data['normal_commission'],
-        premium_commission = data['premium_commission']
+        premium_commission = data['premium_commission'],
+        iva = data['iva'],
+        base_discount = data['base_discount'],
+        total_discount = data['total_discount'],
+        premium_discount = data['premium_discount']
     )
     return state_service.add_state()
 
@@ -27,7 +35,11 @@ def add_state():
     required_params={
         'abbreviation': (str, r'^[A-Z]{2}$'),
         'normal_commission': (float, None),
-        'premium_commission': (float, None)
+        'premium_commission': (float, None),
+        'iva': (float, None),
+        'base_discount': (dict, None),
+        'total_discount': (dict, None),
+        'premium_discount': (dict, None)
     }
 )
 def update_state():
@@ -35,6 +47,10 @@ def update_state():
     state_service = StatesService(
         abbrevation = data['abreviation'],
         normal_commission = data['normal_commission'],
-        premium_commission = data['premium_commission']
+        premium_commission = data['premium_commission'],
+        iva = data['iva'],
+        base_discount = data['base_discount'],
+        total_discount = data['total_discount'],
+        premium_discount = data['premium_discount']
     )
     return state_service.update_state()
