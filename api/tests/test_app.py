@@ -21,9 +21,9 @@ class TestApp(TestCase):
             normal_commission=0.1,
             premium_commission=0.2,
             iva=0.05,
-            base_discount='{"value": 0.1, "min": 0, "max": 100, "min_bound": "exclusive", "max_bound": "exclusive"}',
-            total_discount='{"value": 0.2, "min": 100, "max": 200, "min_bound": "inclusive", "max_bound": "exclusive"}',
-            premium_discount='{"value": 0.1, "min": 0, "max": 200, "min_bound": "inclusive", "max_bound": "exclusive"}'
+            base_discount={"value": 0.1, "min": 0, "max": 100, "min_bound": "exclusive", "max_bound": "exclusive"},
+            total_discount={"value": 0.2, "min": 100, "max": 200, "min_bound": "inclusive", "max_bound": "exclusive"},
+            premium_discount={"value": 0.1, "min": 0, "max": 200, "min_bound": "inclusive", "max_bound": "exclusive"}
         )
         db.session.add(state)
         db.session.commit()
@@ -38,8 +38,8 @@ class TestApp(TestCase):
         response = self.client.post('/estimate', json={
             'state': 'CA',
             'estimation_type': 'NORMAL',
-            'kilometers': 50,
-            'base_amount': 100
+            'kilometers': 50.0,
+            'base_amount': 100.0
         }, headers={'ip-client': '127.0.0.1'})
 
         self.assertEqual(response.status_code, 201)
@@ -58,7 +58,7 @@ class TestApp(TestCase):
             'premium_discount': {"value": 0.1, "min": 0, "max": 200, "min_bound": "inclusive", "max_bound": "exclusive"}
         }, headers={'ip-client': '127.0.0.1'})
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
 
 
     def test_estimate_invalid_state(self):
@@ -69,7 +69,7 @@ class TestApp(TestCase):
             'base_amount': 100
         }, headers={'ip-client': '127.0.0.1'})
 
-        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.status_code, 400)
 
 
     def test_estimate_invalid_estimation_type(self):
@@ -80,7 +80,7 @@ class TestApp(TestCase):
             'base_amount': 100
         }, headers={'ip-client': '127.0.0.1'})
 
-        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.status_code, 400)
 
 
     def test_add_state_invalid_abbreviation(self):
@@ -94,7 +94,7 @@ class TestApp(TestCase):
             'premium_discount': {"value": 0.1, "min": 0, "max": 200, "min_bound": "inclusive", "max_bound": "exclusive"}
         }, headers={'ip-client': '127.0.0.1'})
 
-        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.status_code, 400)
 
 
 if __name__ == '__main__':

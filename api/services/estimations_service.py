@@ -39,7 +39,7 @@ class EstimationsService:
         return jsonify({
             'total_amount': round(total_plus_taxes, 2),
             'processed_date': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-        }), 200
+        }), 201
     
 
     def get_discount(self, data_json, km_th):
