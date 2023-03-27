@@ -39,7 +39,7 @@ class TestEstimationsService(unittest.TestCase):
                 base_amount=100
             )
             response = estimation_service.calculate_estimation()
-            self.assertEqual(response[1], 200)
+            self.assertEqual(response[1], 201)
 
     def test_premium_estimation(self):
         with self.app.app_context():
@@ -50,7 +50,7 @@ class TestEstimationsService(unittest.TestCase):
                 base_amount=100
             )
             response = estimation_service.calculate_estimation()
-            self.assertEqual(response[1], 200)
+            self.assertEqual(response[1], 201)
 
 
 if __name__ == '__main__':
