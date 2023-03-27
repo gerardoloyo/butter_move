@@ -42,16 +42,16 @@ class EstimationsService:
         }), 200
     
 
-    def get_discount(data_json, km_th):
+    def get_discount(self, data_json, km_th):
         if data_json['value'] == 0:
             return 0.0
 
-        min_val = data_json.get('min', float('-inf'))
-        max_val = data_json.get('max', float('inf'))
+        min_val = float(data_json.get('min', float('-inf')))
+        max_val = float(data_json.get('max', float('inf')))
         
         min_bound = data_json.get('min_bound', 'inclusive')
         max_bound = data_json.get('max_boundary', 'exclusive')
-
+        
         if min_bound == 'inclusive':
             min_check = min_val <= km_th
         else:
