@@ -4,7 +4,7 @@ from api.services.states_service import StatesService
 
 states_controller = Blueprint('states_controller', __name__)
 
-@states_controller.route('/state', methods=['POST'])
+@states_controller.route('/state', methods=['POST'], endpoint='add_state')
 @validators.validate_params(
     required_params={
         'abbreviation': (str, r'^[A-Z]{2}$'),
@@ -22,7 +22,7 @@ def add_state():
     return state_service.add_state()
 
 
-@states_controller.route('/state', methods=['PATCH'])
+@states_controller.route('/state', methods=['PATCH'], endpoint='update_state')
 @validators.validate_params(
     required_params={
         'abbreviation': (str, r'^[A-Z]{2}$'),
