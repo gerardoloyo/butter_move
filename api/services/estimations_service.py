@@ -1,43 +1,43 @@
+from flask import jsonify
 from datetime import datetime
-from typing import Dict
 from api.models.states_model import State
 
-STATE_COMMISSIONS = {
-    'NY': {'NORMAL': 0.25, 'PREMIUM': 0.35},
-    'CA': {'NORMAL': 0.23, 'PREMIUM': 0.33},
-    'AZ': {'NORMAL': 0.20, 'PREMIUM': 0.30},
-    'TX': {'NORMAL': 0.18, 'PREMIUM': 0.28},
-    'OH': {'NORMAL': 0.15, 'PREMIUM': 0.25}
-}
+class EstimationsService:
+    def __init__(self, state, estimation_type, kilometers, base_amount):
+        self.state = state.upper()
+        self.estimation_type = estimation_type.upper()
+        self.kilometers = kilometers
+        self.base_amount = base_amount
 
-def calculate_estimation(state: str, estimation_type: str, kilometers: float, base_amount: float) -> Dict[str, str]:
-    state = state.upper()
-    estimation_type = estimation_type.upper()
-    state = State.query.filter_by(abbreviation=state).first()
-    
-    if not state:
-        raise ValueError('Unsupported state')
+    def calculate_estimation(self):
+        try:
+            state = State.query.filter_by(abbreviation = self.state).first()
+        except Exception as e:
+            return jsonify({'result': 'ERROR', 'message': 'Unexpected error'}), 500
+        
+        if not state:
+            return jsonify({'result': 'FAIL', 'message': 'Unsupported state'}), 422
 
-    commission = state.normal_commission if estimation_type == 'NORMAL' else state.premium_commission
-    total_amount = base_amount * (1 + commission)
+        commission = state.normal_commission if self.estimation_type == 'NORMAL' else state.premium_commission
+        total_amount = self.base_amount * (1 + commission)
 
-    if estimation_type == 'NORMAL':
-        if state == 'NY':
-            total_amount *= 1.21
-        elif state in ('CA', 'AZ') and kilometers > 26:
-            total_amount *= 0.95
-        elif state in ('TX', 'OH'):
-            if 20 <= kilometers <= 30:
-                total_amount *= 0.97
-            elif kilometers > 30:
+        if self.estimation_type == 'NORMAL':
+            if state == 'NY':
+                total_amount *= 1.21
+            elif state in ('CA', 'AZ') and self.kilometers > 26:
                 total_amount *= 0.95
-    elif estimation_type == 'PREMIUM':
-        if kilometers > 25:
-            total_amount *= 0.95
+            elif state in ('TX', 'OH'):
+                if 20 <= self.kilometers <= 30:
+                    total_amount *= 0.97
+                elif self.kilometers > 30:
+                    total_amount *= 0.95
+        elif self.estimation_type == 'PREMIUM':
+            if self.kilometers > 25:
+                total_amount *= 0.95
 
-    return {
-        'total_amount': round(total_amount, 2),
-        'processed_date': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-    }
+        return jsonify({
+            'total_amount': round(total_amount, 2),
+            'processed_date': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+        }), 200
 
 

@@ -15,9 +15,9 @@ states_controller = Blueprint('states_controller', __name__)
 def add_state():
     data = request.get_json()
     state_service = StatesService(
-        abbreviation=data['abbreviation'],
-        normal_commission=data['normal_commission'],
-        premium_commission=data['premium_commission']
+        abbreviation = data['abbreviation'],
+        normal_commission = data['normal_commission'],
+        premium_commission = data['premium_commission']
     )
     return state_service.add_state()
 
@@ -33,8 +33,8 @@ def add_state():
 def update_state():
     data = request.get_json()
     state_service = StatesService(
-        abbrevation=data['abreviation'],
-        normal_commission=data['normal_comission'],
-        premium_commission=['premium_comission']
+        abbrevation = data['abreviation'],
+        normal_commission = data['normal_comission'],
+        premium_commission = data['premium_comission']
     )
     return state_service.update_state()

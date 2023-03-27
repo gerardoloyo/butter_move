@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from api.validators import validators
-from api.services import estimations_service
+from api.services.estimations_service import EstimationsService
 
 estimations_controller = Blueprint('estimations_controller', __name__)
 
@@ -15,15 +15,10 @@ estimations_controller = Blueprint('estimations_controller', __name__)
 )
 def estimate():
     data = request.get_json()
-
-    try:
-        result = estimations_service.calculate_estimation(
-            data['state'],
-            data['estimation_type'],
-            data['kilometers'],
-            data['base_amount']
-        )
-    except ValueError as e:
-        return jsonify({'message': str(e)}), 400
-
-    return jsonify(result), 200
+    estimations_service = EstimationsService(
+        state = data['state'],
+        estimation_type = data['estimation_type'],
+        kilometers = data['kilometers'],
+        base_amount = data['base_amount']
+    )
+    return estimations_service.calculate_estimation()
