@@ -4,7 +4,7 @@ from api import db
 
 class StatesService:
     def __init__(self, abbreviation, normal_commission, premium_commission):
-        self.abbreviation = abbrevation
+        self.abbreviation = abbreviation
         self.normal_comission = normal_commission
         self.premium_comission = premium_commission
     
