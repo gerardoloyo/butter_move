@@ -1,14 +1,16 @@
 import json
 import unittest
 from flask_testing import TestCase
-from api import app
-from api.models import db, State
+from api import create_app, db
+from api.models.states_model import State
 
 class TestApp(TestCase):
 
     def create_app(self):
+        app = create_app()
         app.config['TESTING'] = True
         app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test.db'
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         return app
 
 
@@ -40,7 +42,7 @@ class TestApp(TestCase):
             'base_amount': 100
         }, headers={'ip-client': '127.0.0.1'})
 
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertTrue('total_amount' in response.json)
         self.assertTrue('processed_date' in response.json)
 
@@ -78,7 +80,7 @@ class TestApp(TestCase):
             'base_amount': 100
         }, headers={'ip-client': '127.0.0.1'})
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 422)
 
 
     def test_add_state_invalid_abbreviation(self):
@@ -92,7 +94,7 @@ class TestApp(TestCase):
             'premium_discount': {"value": 0.1, "min": 0, "max": 200, "min_bound": "inclusive", "max_bound": "exclusive"}
         }, headers={'ip-client': '127.0.0.1'})
 
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 422)
 
 
 if __name__ == '__main__':
