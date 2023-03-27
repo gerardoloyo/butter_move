@@ -16,7 +16,7 @@ def create_initial_states():
                 iva=0.21,
                 base_discount={'value': 0.0}, 
                 total_discount={'value': 0.0}, 
-                premium_discount={'value': 0.05, 'min': 25.0, 'min_bound': 'inclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
+                premium_discount={'value': 0.05, 'min': 25.0, 'min_bound': 'exclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
             ),
             State(
                 abbreviation='CA',
@@ -25,7 +25,7 @@ def create_initial_states():
                 iva=0.0,
                 base_discount={'value': 0.0}, 
                 total_discount={'value': 0.05, 'min': 26.0, 'min_bound': 'exclusive', 'max': 'inf', 'max_boundary': 'exclusive'}, 
-                premium_discount={'value': 0.95, 'min': 25.0, 'min_bound': 'inclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
+                premium_discount={'value': 0.05, 'min': 25.0, 'min_bound': 'exclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
             ),
             State(
                 abbreviation='AZ',
@@ -34,7 +34,7 @@ def create_initial_states():
                 iva=0.0,
                 base_discount={'value': 0.0}, 
                 total_discount={'value': 0.05, 'min': 26.0, 'min_bound': 'exclusive', 'max': 'inf', 'max_boundary': 'exclusive'}, 
-                premium_discount={'value': 0.95, 'min': 25.0, 'min_bound': 'inclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
+                premium_discount={'value': 0.05, 'min': 25.0, 'min_bound': 'exclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
             ),
             State(
                 abbreviation='TX',
@@ -43,7 +43,7 @@ def create_initial_states():
                 iva=0.0,
                 base_discount={'value': 0.03, 'min': 20.0, 'min_bound': 'inclusive', 'max': 30.0, 'max_boundary': 'inclusive'}, 
                 total_discount={'value': 0.05, 'min': 30.0, 'min_bound': 'exclusive', 'max': 'inf', 'max_boundary': 'exclusive'}, 
-                premium_discount={'value': 0.95, 'min': 25.0, 'min_bound': 'inclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
+                premium_discount={'value': 0.05, 'min': 25.0, 'min_bound': 'exclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
             ),
             State(
                 abbreviation='OH',
@@ -52,7 +52,7 @@ def create_initial_states():
                 iva=0.0,
                 base_discount={'value': 0.03, 'min': 20.0, 'min_bound': 'inclusive', 'max': 30.0, 'max_boundary': 'inclusive'}, 
                 total_discount={'value': 0.05, 'min': 30.0, 'min_bound': 'exclusive', 'max': 'inf', 'max_boundary': 'exclusive'}, 
-                premium_discount={'value': 0.95, 'min': 25.0, 'min_bound': 'inclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
+                premium_discount={'value': 0.05, 'min': 25.0, 'min_bound': 'exclusive', 'max': 'inf', 'max_boundary': 'exclusive'}
             )
         ]
 

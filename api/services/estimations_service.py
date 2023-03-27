@@ -19,25 +19,50 @@ class EstimationsService:
             return jsonify({'result': 'FAIL', 'message': 'Unsupported state'}), 422
 
         commission = state.normal_commission if self.estimation_type == 'NORMAL' else state.premium_commission
-        total_amount = self.base_amount * (1 + commission)
+        total_discount = 0.0
+        base_discount = 0.0
 
         if self.estimation_type == 'NORMAL':
-            if state == 'NY':
-                total_amount *= 1.21
-            elif state in ('CA', 'AZ') and self.kilometers > 26:
-                total_amount *= 0.95
-            elif state in ('TX', 'OH'):
-                if 20 <= self.kilometers <= 30:
-                    total_amount *= 0.97
-                elif self.kilometers > 30:
-                    total_amount *= 0.95
-        elif self.estimation_type == 'PREMIUM':
-            if self.kilometers > 25:
-                total_amount *= 0.95
+            base_discount = self.get_discount(state.base_discount, self.kilometers)
+
+            if base_discount == 0.0:
+                total_discount = self.get_discount(state.total_discount, self.kilometers)
+        
+        if self.estimation_type == 'PREMIUM':
+            total_discount = self.get_discount(state.premium_discount, self.kilometers)
+        
+        base_amount = self.base_amount * (1 - base_discount)
+        total_amount = base_amount * (1 + commission)
+        total_with_discount = total_amount * (1 - total_discount)
+        total_plus_taxes = total_with_discount * (1 + state.iva)
 
         return jsonify({
-            'total_amount': round(total_amount, 2),
+            'total_amount': round(total_plus_taxes, 2),
             'processed_date': datetime.utcnow().strftime('%Y-%m-%dT%H:%M:%S.%fZ')
         }), 200
+    
 
+    def get_discount(data_json, km_th):
+        if data_json['value'] == 0:
+            return 0.0
 
+        min_val = data_json.get('min', float('-inf'))
+        max_val = data_json.get('max', float('inf'))
+        
+        min_bound = data_json.get('min_bound', 'inclusive')
+        max_bound = data_json.get('max_boundary', 'exclusive')
+
+        if min_bound == 'inclusive':
+            min_check = min_val <= km_th
+        else:
+            min_check = min_val < km_th
+
+        if max_bound == 'inclusive':
+            max_check = max_val >= km_th
+        else:
+            max_check = max_val > km_th
+
+        if min_check and max_check:
+            return data_json['value']
+        else:
+            return 0.0
