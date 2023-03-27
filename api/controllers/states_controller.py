@@ -34,7 +34,7 @@ def update_state():
     data = request.get_json()
     state_service = StatesService(
         abbrevation = data['abreviation'],
-        normal_commission = data['normal_comission'],
-        premium_commission = data['premium_comission']
+        normal_commission = data['normal_commission'],
+        premium_commission = data['premium_commission']
     )
     return state_service.update_state()
